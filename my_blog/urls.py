@@ -36,5 +36,7 @@ urlpatterns = [
     path('iris/', include('iris.urls')),
     # 机器学习 -- 猫狗识别
     path('cat_dog/', include('cat_dog.urls')),
+    # 机器学习 -- 人脸识别
+    path('face/', include('face.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

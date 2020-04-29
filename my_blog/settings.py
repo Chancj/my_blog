@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'titanic',
     'iris',
     'cat_dog',
+    'face',
 ]
 
 MIDDLEWARE = [
