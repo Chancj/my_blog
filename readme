@@ -1,4 +1,12 @@
 mysql数据库：djblog
+密码 123456
 
 用户：chancj   chan123456
 后台管理员：chancj    chan123456
+
+虚拟环境 djblog
+环境 djblog
+
+
+avtivate djblog
+python manage.py runserver

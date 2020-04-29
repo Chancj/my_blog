@@ -31,6 +31,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
 
     # 机器学习 -- 泰坦尼克号模型
-    path('titanic/', include('MLApps.titanic.urls')),
+    # path('titanic/', include('titanic.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

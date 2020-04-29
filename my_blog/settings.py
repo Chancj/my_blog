@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'article.templatetags',
 
     # ml机器学习的app
-    'MLApps.titanic',
+    # 'titanic',
 ]
 
 MIDDLEWARE = [
