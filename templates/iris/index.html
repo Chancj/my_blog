@@ -1,0 +1,220 @@
+<!-- extends表明此页面继承自 base.html 文件 -->
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load my_filters_and_tags %}
+
+<!-- 写入 base.html 中定义的 title -->
+{% block title %}
+    鸢尾花数预测
+{% endblock title %}
+
+{% block style %}
+
+    <style>
+        #irisdiv {
+            margin: 50px auto;
+            width: 700px;
+        }
+
+        #linear_pred {
+            margin-top: 50px;
+            margin-bottom: 50px;
+            margin-left: 230px;
+        }
+
+        #logic_pred {
+            margin-top: 20px;
+            margin-bottom: 30px;
+            margin-left: 230px;
+        }
+
+    </style>
+    <script>
+
+        $(function(){
+
+            $("#linear_pred_button").click(function(){
+                var petal_width = $("#petal_width").val();
+                var linear_select = $("#linear_select").val();
+                $.post("linear_pred/",
+                    {
+                        csrfmiddlewaretoken:'{{csrf_token}}',
+                        petal_width:petal_width,
+                        linear_select:linear_select,
+                    },
+                    function(data,status){
+                        $("#linear_result").html(data.msg)//text()
+                    }
+                );
+
+            });
+
+            $("#logic_pred_button").click(function(){
+                var petal_width2 = $("#petal_width2").val();
+                var petal_length = $("#petal_length").val();
+                var sepal_width = $("#sepal_width").val();
+                var sepal_length = $("#sepal_length").val();
+                var logic_select = $("#logic_select").val();
+                $.post("pred/",
+                    {
+                        csrfmiddlewaretoken:'{{csrf_token}}',
+                        petal_width2:petal_width2,
+                        petal_length:petal_length,
+                        sepal_width:sepal_width,
+                        sepal_length:sepal_length,
+                        logic_select:logic_select,
+
+                    },
+                    function(data,status){
+                        $("#logic_result").html(data.msg+"<br>"+data.acc)//text()
+                    }
+                );
+            });
+        })
+    </script>
+{% endblock style %}
+<!-- 写入 base.html 中定义的 content -->
+{% block content %}
+
+
+    <body>
+    <div id=irisdiv>
+        <center><h1 style="margin-top: 20px;">鸢尾花预测系统</h1></center>
+
+        <form action="#" method="get">
+            <div id=linear_pred>
+                <h4>一、线性预测</h4>
+            <div>
+                <br>花瓣宽度：<input type="text" name="petal_width" id="petal_width" placeholder="例：1.0-6.5">
+                <br>
+                <span for="linear_select">选择线性回归算法</span>
+                <select name="linear_select" id="linear_select">
+                    <option value="LinearRegression">线性回归</option>
+                    <option value="PolyRegression">多项式回归</option>
+                </select>
+                <div style="margin-top:15px">
+                    <button type="reset" class="btn btn-danger" value="重置">重置</button>
+                    <button type="button" class="btn btn-success" value="预测" id="linear_pred_button">预测</button>
+                </div>
+                <br>
+                <div id="linear_result"></div>
+            </div>
+            </div>
+            <hr>
+            <div id=logic_pred>
+                <h4>二、分类预测</h4>
+                <div>
+                        <br>花萼长度：<input type="text" name="sepal_length" id="sepal_length" placeholder="例: 4.0-8.0">
+                        <br>花萼宽度：<input type="text" name="sepal_width" id="sepal_width" placeholder="例: 2.0-4.0">
+                        <br>花瓣长度：<input type="text" name="petal_length" id="petal_length" placeholder="例：1.0-6.5">
+                        <br>花瓣宽度：<input type="text" name="petal_width2" id="petal_width2" placeholder="例: 0.1-3.0">
+                </div>
+                <span for="logic_select">选择分类算法</span>
+                <select name="logic_select" id="logic_select">
+                        <option value="KNN">KNN</option>
+                        <option value="LogicRegression">逻辑回归</option>
+                        <option value="DecisionTree">决策树</option>
+                        <option value="RandomForest">随机森林</option>
+                        <option value="SVM">支持向量机</option>
+                        <option value="Cluster">聚类算法</option>
+                </select>
+
+                <div style="margin-top:15px">
+                    <button type="reset" class="btn btn-danger" value="重置">重置</button>
+                    <button type="button" class="btn btn-success" value="预测" id="logic_pred_button">预测</button>
+                </div>
+                <br>
+                <div id=logic_result></div>
+            </div>
+        </form>
+    </div>
+    <hr>
+    </body>
+
+
+    <!-- 列表循环 -->
+    <div class="row mt-2">
+        {% for article in articles %}
+            <!-- 文章内容 -->
+
+            <!-- 标题图 -->
+            {% if article.avatar %}
+                <div class="col-3">
+                    <img src="{{ article.avatar.url }}"
+                         alt="avatar"
+                         style="max-width:100%; border-radius: 20px"
+                    >
+                </div>
+            {% endif %}
+
+            <div class="col">
+                <!-- 栏目 -->
+                {% if article.column %}
+                    <a role="button"
+                       href="{% url 'article:article_list' %}?column={{ article.column.id }}"
+                       class="btn btn-sm mb-2
+                            {% if article.column.title == 'Django' %}
+                                btn-success
+                            {% elif article.column.title == 'Java' %}
+                                btn-danger
+                            {% elif article.column.title == 'HTML' %}
+                                btn-warning
+                            {% endif %}
+                        "
+                    >
+                        {{ article.column }}
+                    </a>
+                {% endif %}
+
+                <!-- 标签 -->
+                <span>
+                    {% for tag in article.tags.all %}
+                        <a href="{% url 'article:article_list' %}?tag={{ tag }}"
+                           class="badge badge-secondary"
+                        >
+                            {{ tag }}
+                        </a>
+                    {% endfor %}
+                </span>
+
+                <!-- 标题 -->
+                <h4>
+                    <b>
+                        <a href="{% url 'article:article_detail' article.id %}"
+                           style="color: black;"
+                        >
+                            {{ article.title }}
+                        </a>
+                    </b>
+                </h4>
+                <!-- 摘要 -->
+                <div>
+                    <p style="color: gray;">
+                        {{ article.body|slice:'100' }}...
+                    </p>
+                </div>
+                <!-- 注脚 -->
+                <p>
+                    <!-- 附加信息 -->
+                    <span>
+                        <i class="fas fa-eye" style="color: lightskyblue;"></i>
+                        {{ article.total_views }}&nbsp;&nbsp;&nbsp;
+                    </span>
+                    <span>
+                        <i class="fas fa-comments" style="color: yellowgreen;"></i>
+                        {{ article.comments.count }}&nbsp;&nbsp;&nbsp;
+                    </span>
+                    <span>
+                        <i class="fas fa-clock" style="color: pink;"></i>
+                        <!--
+                        {{ article.created|date:'Y-m-d' }}
+                        -->
+                        {{ article.created|timesince_zh }}
+                    </span>
+                </p>
+            </div>
+            <hr style="width: 100%;"/>
+        {% endfor %}
+    </div>
+
+{% endblock content %}

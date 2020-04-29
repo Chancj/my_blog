@@ -31,6 +31,10 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
 
     # 机器学习 -- 泰坦尼克号模型
-    # path('titanic/', include('titanic.urls')),
+    path('titanic/', include('titanic.urls')),
+    # 机器学习 -- 燕尾花数
+    path('iris/', include('iris.urls')),
+    # 机器学习 -- 猫狗识别
+    path('cat_dog/', include('cat_dog.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,12 @@
+泰坦尼克号模型
+
+data文件夹存放数据集
+titanic.csv     名单
+ml.csv          基础版数据
+ml_new.csv      进阶版数据
+
+
+mypreprocessing.py      数据清洗模块
+
+ml.py           基础版模型
+ml_new.py       进阶版模型

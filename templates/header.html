@@ -15,9 +15,9 @@
                                 aria-haspopup="true" aria-expanded="false">项目<span class="caret"></span>
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">泰坦尼克号</a>
-                            <a class="dropdown-item" href='#'>项目2</a>
-                            <a class="dropdown-item" href="#">项目3</a>
+                            <a class="dropdown-item" href="{% url 'titanic:titanicindex' %}">泰坦尼克号</a>
+                            <a class="dropdown-item" href="{% url 'iris:irisindex' %}">鸢尾花数</a>
+                            <a class="dropdown-item" href="{% url 'cat_dog:catdogindex' %}">猫狗识别</a>
                             <a class="dropdown-item" href="#">项目4</a>
                         </div>
                     </div>
